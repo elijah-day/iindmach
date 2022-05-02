@@ -17,7 +17,7 @@ CFLAGS = -Wall -Werror -W -pedantic-errors -w -g
 LIBS = -lSDL2 -lSDL2_image -lSDL2_ttf -lm
 TARGET = $(target_dir)/iindmach
 
-all: build clean run
+all: build run
 
 build: $(obj_files)
 	-mkdir -p $(build_dir)
@@ -31,7 +31,7 @@ build: $(obj_files)
 
 
 clean:
-	@rm -f $(obj_files)
+	rm -f $(obj_files)
 	
 run:
 	cd build/iindmach; ./iindmach; cd ../../
