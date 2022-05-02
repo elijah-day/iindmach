@@ -20,6 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "iind_edit.h"
 #include "iind_world.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 void iind_create_world_tile
 (
