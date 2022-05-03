@@ -1,0 +1,25 @@
+name: Makefile CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build package
+      run: make build
+    - name: Upload build artifact
+      uses: actions/upload-artifact@v3.0.0
+      with:
+        # Artifact name
+        name: Linux
+        # A file, directory or wildcard pattern that describes what to upload
+        path: build/iindmach
+        # The desired behavior if no files are found using the provided path.
