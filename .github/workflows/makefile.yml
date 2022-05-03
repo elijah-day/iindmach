@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies (dependency)
-      run: sudo apt install -y libsdl2-dev libsdl2-ttf-dev libsdl-stretch libsdl2-mixer libsdl2-net libsdl2-image libsdl2-mixer-dev libsdl2-net-dev libsdl-sound
+      run: sudo apt install -y libsdl2-dev libsdl2-ttf-dev libsdl2-net-dev libsdl2-image-dev libsdl2-gfx-dev
     - name: Build package
       run: make build
     - name: Upload build artifact
