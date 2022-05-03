@@ -33,6 +33,8 @@ MISC. DEFINITIONS
 #define IIND_DEFAULT_WORLD_ENTITY_MOVEMENT_SPEED 0.015
 #define IIND_DEFAULT_WORLD_DOOR_FUNC_RADIUS 0.5
 
+#define IIND_WORLD_ENTITY_MAX_HEALTH 100
+
 /*
 ========================
 WORLD MARKER DEFINITIONS
@@ -111,7 +113,7 @@ IINDWorldTile;
 
 typedef struct IINDWorldEntity
 {
-	float x, y, speed, angle;
+	float x, y, speed, angle, health;
 	int sdl_texture_id, anim_col, anim_row;
 	bool collision;
 }

@@ -27,10 +27,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_GUI_TEXT_BOX_B 15
 #define IIND_GUI_TEXT_BOX_A 127
 
-#define IIND_GUI_ENERGY_BAR_R 240
-#define IIND_GUI_ENERGY_BAR_G 240
-#define IIND_GUI_ENERGY_BAR_B 190
-#define IIND_GUI_ENERGY_BAR_A 255
+#define IIND_GUI_HEALTH_BAR_R 240
+#define IIND_GUI_HEALTH_BAR_G 240
+#define IIND_GUI_HEALTH_BAR_B 190
+#define IIND_GUI_HEALTH_BAR_A 255
 
 #include "iind_gui.h"
 #include "iind_world.h"
@@ -40,6 +40,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 void iind_render_gui
 (
 	SDL_Renderer *iind_sdl_renderer,
+	IINDWorldEntity *iind_world_entities,
 	IINDGUIElement *iind_gui_elements,
 	int iind_render_scale,
 	float iind_aspect_ratio,

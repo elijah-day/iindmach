@@ -675,6 +675,21 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					iind_edit_tags[3] += 1;
 				}
 				
+				/*Health bar testing.*/
+				
+				if(iind_sdl_key_presses[SDL_SCANCODE_Z])
+				{		
+					iind_world_entities[0].health -= 0.5;
+				}
+				if(iind_sdl_key_presses[SDL_SCANCODE_X])
+				{		
+					iind_world_entities[0].health += 0.5;
+				}
+				if(iind_sdl_key_presses[SDL_SCANCODE_C])
+				{		
+					iind_world_entities[0].health = 100;
+				}
+				
 				if(iind_sdl_key_presses[SDL_SCANCODE_F5] && !iind_input_hold_state)
 				{
 					iind_save_world
@@ -851,6 +866,24 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				{
 					iind_anim_counter = 0;
 				}
+				
+				/*
+				I'm not sure where else to put this at the moment.
+				Possibly add a misc. updating function for the animations
+				health values, etc.
+				*/
+				if(iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health < 0)
+				{
+					iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health = 0;
+				}
+				if
+				(
+					iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health >
+					IIND_WORLD_ENTITY_MAX_HEALTH
+				)
+				{
+					iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health = 100;
+				}
 			}
 			
 			/*
@@ -906,6 +939,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				iind_render_gui
 				(
 					iind_sdl_renderer,
+					iind_world_entities,
 					iind_gui_elements,
 					iind_render_scale,
 					iind_aspect_ratio,

@@ -30,6 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 void iind_render_gui
 (
 	SDL_Renderer *iind_sdl_renderer,
+	IINDWorldEntity *iind_world_entities,
 	IINDGUIElement *iind_gui_elements,
 	int iind_render_scale,
 	float iind_aspect_ratio,
@@ -211,17 +212,17 @@ void iind_render_gui
 	{
 		/*
 		====================
-		ENERGY BAR RENDERING
+		HEALTH BAR RENDERING
 		====================
 		*/
 		
 		SDL_SetRenderDrawColor
 		(
 			iind_sdl_renderer,
-			IIND_GUI_ENERGY_BAR_R,
-			IIND_GUI_ENERGY_BAR_G,
-			IIND_GUI_ENERGY_BAR_B,
-			IIND_GUI_ENERGY_BAR_A
+			IIND_GUI_HEALTH_BAR_R,
+			IIND_GUI_HEALTH_BAR_G,
+			IIND_GUI_HEALTH_BAR_B,
+			IIND_GUI_HEALTH_BAR_A
 		);
 		
 		iind_sdl_destrect.x =
@@ -230,7 +231,8 @@ void iind_render_gui
 		iind_sdl_destrect.y = 0.2 * iind_render_scale;
 			
 		iind_sdl_destrect.w =
-		3 * iind_render_scale * iind_aspect_ratio;
+		(iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health /
+		IIND_WORLD_ENTITY_MAX_HEALTH) * 3 * iind_render_scale * iind_aspect_ratio;
 		
 		iind_sdl_destrect.h =
 		0.5 * iind_render_scale;

@@ -142,6 +142,9 @@ void iind_create_world_entity
 		(*iind_world_entities)[*iind_world_entity_count].angle =
 		*iind_edit_angle;
 		
+		(*iind_world_entities)[*iind_world_entity_count].health =
+		IIND_WORLD_ENTITY_MAX_HEALTH;
+		
 		(*iind_world_entities)[*iind_world_entity_count].sdl_texture_id =
 		*iind_edit_id;
 		
