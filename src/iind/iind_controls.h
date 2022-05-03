@@ -20,25 +20,25 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef IIND_CONTROLS_H
 #define IIND_CONTROLS_H
 
-#define IIND_DEFAULT_CAMERA_MOVEMENT_SPEED 0.04
+#define IIND_SDL_KEY_COUNT 322
+
+#define IIND_FULLSCREEN_KEY_BIND_ID 0
+#define IIND_QUICKSAVE_KEY_BIND_ID 1
+#define IIND_DIALOGUE_KEY_BIND_ID 2
+#define IIND_MENU_KEY_BIND_ID 3
 
 #include "iind_render.h"
 #include "iind_world.h"
 #include <stdbool.h>
 
-void iind_handle_controls
+void iind_handle_player_movement_controls
 (
+	IINDWorldMarker *iind_world_markers,
+	int iind_sdl_mouse_pos[],
+	int iind_sdl_mouse_state,
 	int iind_render_scale,
 	float iind_aspect_ratio,
-	float *iind_camera,
-	bool iind_sdl_key_presses[],
-	int iind_sdl_mouse_state,
-	int iind_sdl_mouse_pos[],
-	IINDWorldMarker *iind_world_markers,
-	IINDWorldTile *iind_world_tiles,
-	IINDWorldEntity *iind_world_entities,
-	int iind_world_tile_count,
-	int iind_world_entity_count
+	float iind_camera[]
 );
 
 #endif

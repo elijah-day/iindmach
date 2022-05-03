@@ -123,11 +123,15 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	===========
 	*/
 	
-	int iind_anim_counter = IIND_DEFAULT_COUNTER_VAL;
 	int iind_render_scale = IIND_DEFAULT_RENDER_SCALE;
 	float iind_aspect_ratio = IIND_DEFAULT_ASPECT_RATIO;
+	
 	float iind_camera[2] = {0, 0};
+	
 	int iind_sdl_window_size[2];
+	bool iind_sdl_window_fullscreen_state = false;
+	
+	int iind_anim_counter = IIND_DEFAULT_COUNTER_VAL;
 	
 	SDL_GetWindowSize
 	(
@@ -294,7 +298,15 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	int iind_sdl_mouse_pos[2];
 	
 	bool iind_sdl_key_presses[IIND_SDL_KEY_COUNT];
-	for(int i = 0; i < IIND_SDL_KEY_COUNT; i++) iind_sdl_key_presses[i] = false;
+	bool iind_sdl_key_hold_states[IIND_SDL_KEY_COUNT];
+	int iind_sdl_key_bind_ids[IIND_SDL_KEY_COUNT];
+	
+	for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
+	{
+		iind_sdl_key_presses[i] = false;
+		iind_sdl_key_hold_states[i] = false;
+		iind_sdl_key_bind_ids[i] = -1;
+	}
 	
 	bool iind_input_hold_state = false;
 	
@@ -304,7 +316,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	==============
 	*/
 
-	bool iind_edit_mode = false;
+	bool iind_edit_mode = true;
 	
 	float iind_edit_x = 0;
 	float iind_edit_y = 0;
@@ -432,15 +444,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 		if(iind_edit_mode)
 		{
 			iind_world_markers[IIND_WORLD_EDIT_MODE_MARKER].active = true;
-		}
-		
-		/*
-		============
-		CAMERA SETUP
-		============
-		*/
-		
-		
+		}		
 		
 		/*
 		===================
@@ -504,28 +508,85 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				)
 			)
 			{
+				/*TEMPORARY KEY BIND ASSIGNMENT:*/
+				iind_sdl_key_bind_ids[SDL_SCANCODE_F11] =
+				IIND_FULLSCREEN_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_F5] =
+				IIND_QUICKSAVE_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_SPACE] =
+				IIND_DIALOGUE_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_ESCAPE] =
+				IIND_MENU_KEY_BIND_ID;
+				/*END*/
+				
+				iind_handle_player_movement_controls
+				(
+					iind_world_markers,
+					iind_sdl_mouse_pos,
+					iind_sdl_mouse_state,
+					iind_render_scale,
+					iind_aspect_ratio,
+					iind_camera
+				);
+				
+				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
+				{
+					if(iind_sdl_key_presses[i])
+					{	
+						if(iind_sdl_key_hold_states[i]) break;
+						iind_sdl_key_hold_states[i] = true;
+						
+						if
+						(
+							iind_handle_navigation_controls
+							(
+								iind_sdl_key_bind_ids[i],
+								iind_dialogue_tags
+							)
+						)
+						{
+							break;
+						}
+						else if
+						(
+							iind_handle_misc_controls
+							(
+								iind_sdl_key_bind_ids[i],
+								iind_sdl_window,
+								iind_sdl_renderer,
+								iind_world_names[iind_cur_world_id],
+								iind_world_tiles,
+								iind_world_entities,
+								iind_world_funcs,
+								iind_world_tile_count,
+								iind_world_entity_count,
+								iind_world_func_count,
+								iind_gui_elements,
+								iind_gui_text_ttf_font,
+								iind_gui_text_sdl_color,
+								&iind_sdl_window_fullscreen_state
+							)
+						)
+						{
+							break;
+						}
+					}
+					else
+					{
+						iind_sdl_key_hold_states[i] = false;
+					}
+				}
+				
+				
 				/*
 				BEGIN TEMP.
 				EVERYTHING PAST THIS POINT SHOULD BE REWORKED INTO
 				THE CONTROLS FUNCTION.
 				*/
-				
-				/*
-				if(!iind_input_hold_state)
-				{
-					if(iind_sdl_key_presses[SDL_SCANCODE_A])
-					{
-						...
-					}
-					else if(iind_sdl_key_presses[SDL_SCANCODE_B])
-					{
-						...
-					}
-					else if
-					...
-				}
-				*/
-				
+					
 				if(iind_sdl_key_presses[SDL_SCANCODE_E] && !iind_input_hold_state)
 				{		
 					if(iind_edit_world_element_type == 0) iind_create_world_tile
@@ -552,11 +613,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					);
 					
 					iind_input_hold_state = true;
-				}
-				
-				if(iind_sdl_key_presses[SDL_SCANCODE_SPACE] && !iind_input_hold_state)
-				{		
-					iind_dialogue_tags[IIND_DIALOGUE_CUR_TAG] += 1;
 				}
 				
 				if(iind_sdl_key_presses[SDL_SCANCODE_R] && !iind_input_hold_state)
@@ -690,31 +746,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					iind_world_entities[0].health = 100;
 				}
 				
-				if(iind_sdl_key_presses[SDL_SCANCODE_F5] && !iind_input_hold_state)
-				{
-					iind_save_world
-					(
-						iind_world_names[iind_cur_world_id],
-						iind_world_tiles,
-						iind_world_entities,
-						iind_world_funcs,
-						iind_world_tile_count,
-						iind_world_entity_count,
-						iind_world_func_count
-					);
-					
-					iind_update_gui_text_element
-					(
-						iind_sdl_renderer,
-						iind_gui_elements,
-						IIND_GUI_HINT_ELEMENT,
-						iind_gui_text_ttf_font,
-						iind_gui_text_sdl_color,
-						"Quicksaving...",
-						0
-					);
-				}
-				
 				/*Prevents holding down certain keys.*/
 				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
 				{
@@ -753,42 +784,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 						0
 					);
 				}
-				
-				
-				if(iind_sdl_key_presses[SDL_SCANCODE_F10])
-				{
-					SDL_SetWindowFullscreen
-					(
-						iind_sdl_window,
-						0
-					);
-					
-					SDL_GetWindowSize
-					(
-						iind_sdl_window,
-						&iind_sdl_window_size[0],
-						&iind_sdl_window_size[1]
-					);
-				}
-				
-				if(iind_sdl_key_presses[SDL_SCANCODE_F11])
-				{
-					SDL_SetWindowFullscreen
-					(
-						iind_sdl_window,
-						SDL_WINDOW_FULLSCREEN_DESKTOP
-					);
-					
-					SDL_GetWindowSize
-					(
-						iind_sdl_window,
-						&iind_sdl_window_size[0],
-						&iind_sdl_window_size[1]
-					);
-				}
-				
-				if(iind_sdl_key_presses[SDL_SCANCODE_ESCAPE])
-				iind_running_state = false;
 				/*
 				END TEMP.
 				EVERYTHING BEFORE THIS POINT SHOULD BE REWORKED INTO
@@ -809,21 +804,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					iind_world_entities,
 					iind_world_entity_count,
 					iind_anim_counter
-				);
-				
-				iind_handle_controls
-				(
-					iind_render_scale,
-					iind_aspect_ratio,
-					iind_camera,
-					iind_sdl_key_presses,
-					iind_sdl_mouse_state,
-					iind_sdl_mouse_pos,
-					iind_world_markers,
-					iind_world_tiles,
-					iind_world_entities,
-					iind_world_tile_count,
-					iind_world_entity_count
 				);
 				
 				iind_handle_player_movement
@@ -869,7 +849,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				
 				/*
 				I'm not sure where else to put this at the moment.
-				Possibly add a misc. updating function for the animations
+				Possibly add a misc. updating function for the animations,
 				health values, etc.
 				*/
 				if(iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health < 0)
@@ -902,6 +882,13 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				)
 			)
 			{	
+				SDL_GetWindowSize
+				(
+					iind_sdl_window,
+					&iind_sdl_window_size[0],
+					&iind_sdl_window_size[1]
+				);
+			
 				iind_camera[0] =
 				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x + 0.75 +
 				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y -

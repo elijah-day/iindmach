@@ -36,8 +36,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_DEFAULT_DIALOGUE_LIST_PATH "dialogue.list"
 #define IIND_DEFAULT_SDL_GUI_FONT_PATH "assets/fonts/mononoki-Regular.ttf"
 
-#define IIND_SDL_KEY_COUNT 322
-
 #define IIND_WORLD_NAME_MAX_LEN 128
 #define IIND_DIALOGUE_MAX_LEN 64
 #define IIND_EDIT_INFO_STR_MAX_LEN 128
