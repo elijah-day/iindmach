@@ -14,7 +14,7 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Install dependencies (dependency)
-      run: sudo apt install -y libsdl2-dev
+      run: sudo apt install -y libsdl2-dev libsdl2-ttf-dev
     - name: Build package
       run: make build
     - name: Upload build artifact
