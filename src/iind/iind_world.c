@@ -388,6 +388,12 @@ void iind_handle_world_funcs
 					}
 				
 					break;
+					
+				case IIND_WORLD_CHARGER_FUNC:
+					
+					iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health += 0.1;
+					
+					break;
 			}
 		}
 		
@@ -442,6 +448,23 @@ void iind_update_world_entity_anims
 				iind_world_entities[i].anim_row = 1;
 			}
 		}
+		
+		/*
+		======================
+		DEATH ANIMATION UPDATE
+		======================
+		*/
+		
+		if(iind_world_entities[i].health <= 0)
+		{
+			iind_world_entities[i].anim_row = 5;
+		}
+	
+		/*
+		========================
+		WALKING ANIMATION UPDATE
+		========================
+		*/
 	
 		if
 		(
@@ -527,7 +550,11 @@ void iind_handle_player_movement
 	int iind_world_entity_count
 )
 {
-	if(iind_world_markers[IIND_WORLD_PLAYER_MOVEMENT_MARKER].active)
+	if
+	(
+		iind_world_markers[IIND_WORLD_PLAYER_MOVEMENT_MARKER].active &&
+		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health > 0
+	)
 	{
 		iind_world_entities[0].angle = atan
 		(
@@ -555,7 +582,7 @@ void iind_handle_player_movement
 		
 		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].speed =
 		IIND_DEFAULT_WORLD_ENTITY_MOVEMENT_SPEED;
-			
+		
 		iind_move_world_entity
 		(
 			iind_world_tiles,
@@ -566,6 +593,9 @@ void iind_handle_player_movement
 			iind_world_entities[IIND_WORLD_PLAYER_ENTITY].speed,
 			iind_world_entities[IIND_WORLD_PLAYER_ENTITY].angle
 		);
+		
+		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health -=
+		IIND_WORLD_ENTITY_MOVEMENT_HEALTH_DRAIN_RATE;
 	}
 	else iind_world_entities[IIND_WORLD_PLAYER_ENTITY].speed = 0;
 	

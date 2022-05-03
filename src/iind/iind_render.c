@@ -234,6 +234,15 @@ void iind_render_gui
 		(iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health /
 		IIND_WORLD_ENTITY_MAX_HEALTH) * 3 * iind_render_scale * iind_aspect_ratio;
 		
+		if(iind_sdl_destrect.w > 3 * iind_render_scale * iind_aspect_ratio)
+		{
+			iind_sdl_destrect.w = 3 * iind_render_scale * iind_aspect_ratio;
+		}
+		else if(iind_sdl_destrect.w < 0)
+		{
+			iind_sdl_destrect.w = 0;
+		}
+		
 		iind_sdl_destrect.h =
 		0.5 * iind_render_scale;
 	
