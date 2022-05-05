@@ -41,4 +41,28 @@ void iind_handle_player_movement_controls
 	float iind_camera[]
 );
 
+bool iind_handle_navigation_controls
+(
+	int iind_sdl_key_bind_id,
+	int *iind_dialogue_tags
+);
+
+bool iind_handle_misc_controls
+(
+	int iind_sdl_key_bind_id,
+	SDL_Window *iind_sdl_window,
+	SDL_Renderer *iind_sdl_renderer,
+	char *iind_world_save_name,
+	IINDWorldTile *iind_world_tiles,
+	IINDWorldEntity *iind_world_entities,
+	IINDWorldFunc *iind_world_funcs,
+	int iind_world_tile_count,
+	int iind_world_entity_count,
+	int iind_world_func_count,
+	IINDGUIElement *iind_gui_elements,
+	TTF_Font *iind_gui_text_ttf_font,
+	SDL_Color iind_gui_text_sdl_color,
+	bool *iind_sdl_window_fullscreen_state
+);
+
 #endif
