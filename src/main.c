@@ -23,7 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include <stdlib.h>
 
 int main(int argc, char *argv[])
-{	
+{
 	SDL_Window *iind_sdl_window = NULL;
 	SDL_Renderer *iind_sdl_renderer = NULL;
 
@@ -33,6 +33,6 @@ int main(int argc, char *argv[])
 	}
 
 	iind_terminate_sdl(iind_sdl_window, iind_sdl_renderer);
-	
+
 	return 0;
 }

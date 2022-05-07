@@ -8,7 +8,7 @@ obj_files = \
 	src/iind/iind_run.o \
 	src/iind/iind_world.o \
 	src/main.o
-	
+
 build_dir = build
 target_dir = build/iindmach
 
@@ -29,12 +29,11 @@ build: $(obj_files)
 	cp -r data/modules $(target_dir)
 	cp data/dialogue.list $(target_dir)
 
-
 clean:
 	rm -f $(obj_files)
-	
+
 run:
 	cd build/iindmach; ./iindmach; cd ../../
-	
+
 destroy:
 	rm -rf $(target_dir)

@@ -1,0 +1,72 @@
+#TODO: Clean this up a bit.
+
+obj_files = \
+	src/iind/iind_controls.o \
+	src/iind/iind_edit.o \
+	src/iind/iind_gui.o \
+	src/iind/iind_init.o \
+	src/iind/iind_load.o \
+	src/iind/iind_render.o \
+	src/iind/iind_run.o \
+	src/iind/iind_world.o \
+	src/main.o
+
+include_dirs = \
+	-I external/SDL2-2.0.22/x86_64-w64-mingw32/include \
+	-I external/SDL2_image-2.0.5/x86_64-w64-mingw32/include \
+	-I external/SDL2_ttf-2.0.15/x86_64-w64-mingw32/include \
+	-I external/SDL2-2.0.22/x86_64-w64-mingw32/include/SDL2 \
+	-I external/SDL2_image-2.0.5/x86_64-w64-mingw32/include/SDL2 \
+	-I external/SDL2_ttf-2.0.15/x86_64-w64-mingw32/include/SDL2
+	#-I external/SDL2-2.0.22/i686-w64-mingw32/include \
+	#-I external/SDL2_image-2.0.5/i686-w64-mingw32/include \
+	#-I external/SDL2_ttf-2.0.15/i686-w64-mingw32/include \
+	#-I external/SDL2-2.0.22/i686-w64-mingw32/include/SDL2 \
+	#-I external/SDL2_image-2.0.5/i686-w64-mingw32/include/SDL2 \
+	#-I external/SDL2_ttf-2.0.15/i686-w64-mingw32/include/SDL2
+
+#The whole "undefined reference to WinMain" thing was the result of trying to link to "/bin" instead of "/lib."
+
+linker_dirs = \
+	-L external/SDL2-2.0.22/x86_64-w64-mingw32/lib \
+	-L external/SDL2_image-2.0.5/x86_64-w64-mingw32/lib \
+	-L external/SDL2_ttf-2.0.15/x86_64-w64-mingw32/lib \
+	#-L external/SDL2-2.0.22/i686-w64-mingw32/lib \
+	#-L external/SDL2_image-2.0.5/i686-w64-mingw32/lib \
+	#-L external/SDL2_ttf-2.0.15/i686-w64-mingw32/lib
+
+build_dir = build
+target_dir = build/iindmach
+
+CC = x86_64-w64-mingw32-gcc
+#CC = i686-w64-mingw32-gcc
+CFLAGS =$(include_dirs) $(linker_dirs) -w -Wl,-subsystem,windows -mwindows
+LIBS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf
+TARGET = $(target_dir)/iindmach.exe
+
+all: build run
+
+build: $(obj_files)
+	-mkdir -p $(build_dir)
+	-mkdir -p $(target_dir)
+	$(CC) $(obj_files) $(CFLAGS) $(LIBS) -o $(TARGET)
+	rm -rf $(target_dir)/assets
+	rm -rf $(target_dir)/modules
+	cp -r data/assets $(target_dir)
+	cp -r data/modules $(target_dir)
+	cp data/dialogue.list $(target_dir)
+	cp external/SDL2-2.0.22/x86_64-w64-mingw32/bin/SDL2.dll $(target_dir)
+	cp external/SDL2_image-2.0.5/x86_64-w64-mingw32/bin/SDL2_image.dll $(target_dir)
+	cp external/SDL2_image-2.0.5/x86_64-w64-mingw32/bin/zlib1.dll $(target_dir)
+	cp external/SDL2_image-2.0.5/x86_64-w64-mingw32/bin/libpng16-16.dll $(target_dir)
+	cp external/SDL2_ttf-2.0.15/x86_64-w64-mingw32/bin/libfreetype-6.dll $(target_dir)
+	cp external/SDL2_ttf-2.0.15/x86_64-w64-mingw32/bin/SDL2_ttf.dll $(target_dir)
+
+clean:
+	rm -f $(obj_files)
+
+run:
+	cd build/iindmach; wine64 iindmach.exe; cd ../../
+
+destroy:
+	rm -rf $(target_dir)
