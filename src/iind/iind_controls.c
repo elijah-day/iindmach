@@ -19,6 +19,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 
 #include "iind_controls.h"
 #include "iind_gui.h"
+#include "iind_load.h"
 #include "iind_world.h"
 #include "SDL2/SDL.h"
 #include <stdbool.h>
