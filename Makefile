@@ -8,7 +8,7 @@ obj_files = \
 	src/iind/iind_run.o \
 	src/iind/iind_world.o \
 	src/main.o
-	
+
 build_dir = build
 target_dir = build/iindmach
 
@@ -74,7 +74,7 @@ else ifeq ($(OS), win64)
 		$(target_dir); \
 		cp external/SDL2_ttf-2.0.15/x86_64-w64-mingw32/bin/SDL2_ttf.dll \
 		$(target_dir); \
-	
+
 else ifeq ($(OS), linux)
 	CC = gcc
 	CFLAGS +=
@@ -91,13 +91,22 @@ build: $(obj_files)
 	$(CC) $(obj_files) $(CFLAGS) $(LIBS) -o $(TARGET)
 	$(cp_bin_method)
 	make cp-data
-	
+	make cp-docs
+
 cp-data:
-	rm -rf $(target_dir)/assets
-	rm -rf $(target_dir)/modules
+	-rm -rf $(target_dir)/assets
+	-rm -rf $(target_dir)/modules
 	cp -r data/assets $(target_dir)
 	cp -r data/modules $(target_dir)
 	cp data/dialogue.list $(target_dir)
+
+cp-docs:
+	-rm -rf $(target_dir)/docs
+	-rm $(target_dir)/README.md
+	-rm $(target_dir)/LICENSE
+	cp -r docs $(target_dir)
+	cp README.md $(target_dir)
+	cp LICENSE $(target_dir)
 
 run:
 	cd build/iindmach; $(run_method); cd ../../
