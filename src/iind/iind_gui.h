@@ -20,7 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef IIND_GUI_H
 #define IIND_GUI_H
 
-#define IIND_GUI_ELEMENT_COUNT 3
+#define IIND_GUI_ELEMENT_COUNT 4
 
 #define IIND_GUI_ELEMENT_MESSAGE_MAX_LEN 128
 #define IIND_GUI_DISPLAY_COUNTER_START 255
@@ -28,6 +28,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_GUI_HINT_ELEMENT 0
 #define IIND_GUI_DIALOGUE_ELEMENT 1
 #define IIND_GUI_STATUS_BAR_ELEMENT 2
+#define IIND_GUI_MENU_ELEMENT 3
 
 #define IIND_GUI_STATUS_BAR_TEXTURE_ID 21
 

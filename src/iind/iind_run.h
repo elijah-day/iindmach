@@ -23,7 +23,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_DEFAULT_COUNTER_VAL 0
 #define IIND_DEFAULT_FPS 64
 #define IIND_DEFAULT_WORLD_TIME_SCALE 128
-#define IIND_DEFAULT_RENDER_SCALE 96
+#define IIND_DEFAULT_RENDER_SCALE 80
 #define IIND_DEFAULT_ASPECT_RATIO 16 / 9
 #define IIND_DEFAULT_ANIM_SPEED 28
 #define IIND_DEFAULT_WORLD_ID 0
@@ -40,6 +40,11 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_DIALOGUE_MAX_LEN 64
 #define IIND_EDIT_INFO_STR_MAX_LEN 128
 #define IIND_WORLD_MARKER_COUNT 2
+
+#define IIND_MENU_ITEM_COUNT 2
+#define IIND_MENU_ITEM_STR_MAX_LEN 16
+#define IIND_MENU_ITEM_1_STR "< QUIT >"
+#define IIND_MENU_ITEM_2_STR "< SAVE >"
 
 #include "SDL2/SDL.h"
 #include <stdbool.h>

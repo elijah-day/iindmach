@@ -20,6 +20,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "iind_controls.h"
 #include "iind_gui.h"
 #include "iind_load.h"
+#include "iind_run.h"
 #include "iind_world.h"
 #include "SDL2/SDL.h"
 #include <stdbool.h>
@@ -57,13 +58,29 @@ void iind_handle_player_movement_controls
 bool iind_handle_navigation_controls
 (
 	int iind_sdl_key_bind_id,
-	int *iind_dialogue_tags
+	int *iind_dialogue_tags,
+	bool *iind_menu_state,
+	int *iind_selected_menu_item
 )
 {
 	switch(iind_sdl_key_bind_id)
 	{
 		case IIND_DIALOGUE_KEY_BIND_ID:
 			iind_dialogue_tags[IIND_DIALOGUE_CUR_TAG] += 1;
+			break;
+			
+		case IIND_MENU_KEY_BIND_ID:
+			*iind_menu_state = !(*iind_menu_state);
+			break;
+			
+		case IIND_MENU_LEFT_KEY_BIND:
+			*iind_selected_menu_item -= 1;
+			if(*iind_selected_menu_item < 0) *iind_selected_menu_item = IIND_MENU_ITEM_COUNT - 1;
+			break;
+			
+		case IIND_MENU_RIGHT_KEY_BIND:
+			*iind_selected_menu_item += 1;
+			if(*iind_selected_menu_item > IIND_MENU_ITEM_COUNT - 1) *iind_selected_menu_item = 0;
 			break;
 			
 		default:

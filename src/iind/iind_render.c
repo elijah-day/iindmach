@@ -61,7 +61,7 @@ void iind_render_gui
 	{	
 		iind_sdl_destrect.x = iind_render_scale * iind_aspect_ratio / 5;
 		
-		iind_sdl_destrect.y = iind_render_scale * iind_aspect_ratio / 10;
+		iind_sdl_destrect.y = iind_render_scale / 10;
 		
 		iind_sdl_destrect.w =
 		iind_gui_elements[IIND_GUI_HINT_ELEMENT].text_len *
@@ -287,6 +287,44 @@ void iind_render_gui
 			(
 				iind_sdl_renderer,
 				iind_sdl_textures[IIND_GUI_STATUS_BAR_TEXTURE_ID],
+				NULL,
+				&iind_sdl_destrect
+			)
+			!= 0
+		)
+		{
+			printf("SDL_RenderCopy error: %s\n", SDL_GetError());
+		}
+	}
+	
+	/*
+	==========================
+	GUI MENU ELEMENT RENDERING
+	==========================
+	*/
+	
+	if(strcmp(iind_gui_elements[IIND_GUI_MENU_ELEMENT].text, " ") != 0)
+	{
+		/*TODO: Simplify this someday.*/
+		iind_sdl_destrect.x =
+		iind_sdl_window_size[0] / 2 -
+		iind_gui_elements[IIND_GUI_MENU_ELEMENT].text_len *
+		iind_render_scale * iind_aspect_ratio / 10;
+		
+		iind_sdl_destrect.y = 0;
+		
+		iind_sdl_destrect.w =
+		iind_gui_elements[IIND_GUI_MENU_ELEMENT].text_len *
+		iind_render_scale * iind_aspect_ratio / 5;
+		
+		iind_sdl_destrect.h = iind_render_scale / 2;
+
+		if
+		(
+			SDL_RenderCopy
+			(
+				iind_sdl_renderer,
+				iind_gui_elements[IIND_GUI_MENU_ELEMENT].sdl_texture,
 				NULL,
 				&iind_sdl_destrect
 			)

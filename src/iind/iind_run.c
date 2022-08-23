@@ -242,6 +242,8 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 			iind_gui_elements[i].sdl_texture,
 			SDL_BLENDMODE_BLEND
 		);
+		
+		iind_gui_elements[i].display_counter = 0;
 	}
 	
 	/*
@@ -287,6 +289,22 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	);
 	
 	/*
+	=========
+	MENU VARS
+	=========
+	*/
+	
+	bool iind_menu_state = false;
+	
+	char iind_menu_item_strings[IIND_MENU_ITEM_COUNT][IIND_MENU_ITEM_STR_MAX_LEN] =
+	{
+		IIND_MENU_ITEM_1_STR,
+		IIND_MENU_ITEM_2_STR
+	};
+	
+	int iind_selected_menu_item = 0;
+	
+	/*
 	==============
 	SDL INPUT VARS
 	==============
@@ -316,7 +334,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	==============
 	*/
 
-	bool iind_edit_mode = true;
+	bool iind_edit_mode = false;
 	
 	float iind_edit_x = 0;
 	float iind_edit_y = 0;
@@ -520,6 +538,13 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				
 				iind_sdl_key_bind_ids[SDL_SCANCODE_ESCAPE] =
 				IIND_MENU_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_LEFT] =
+				IIND_MENU_LEFT_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_RIGHT] =
+				IIND_MENU_RIGHT_KEY_BIND_ID;
+				
 				/*END*/
 				
 				iind_handle_player_movement_controls
@@ -544,7 +569,9 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 							iind_handle_navigation_controls
 							(
 								iind_sdl_key_bind_ids[i],
-								iind_dialogue_tags
+								iind_dialogue_tags,
+								&iind_menu_state,
+								&iind_selected_menu_item
 							)
 						)
 						{
@@ -789,6 +816,35 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				EVERYTHING BEFORE THIS POINT SHOULD BE REWORKED INTO
 				THE CONTROLS FUNCTION.
 				*/
+
+				if(iind_menu_state && iind_input_hold_state)
+				{
+					iind_update_gui_text_element
+					(
+						iind_sdl_renderer,
+						iind_gui_elements,
+						IIND_GUI_MENU_ELEMENT,
+						iind_gui_text_ttf_font,
+						iind_gui_text_sdl_color,
+						iind_menu_item_strings[iind_selected_menu_item],
+						0
+					);
+				}
+				else if(iind_input_hold_state)
+				{
+					iind_update_gui_text_element
+					(
+						iind_sdl_renderer,
+						iind_gui_elements,
+						IIND_GUI_MENU_ELEMENT,
+						iind_gui_text_ttf_font,
+						iind_gui_text_sdl_color,
+						" ",
+						0
+					);
+					
+					iind_selected_menu_item = 0;
+				}
 				
 				if(iind_edit_mode)
 				{
@@ -906,7 +962,12 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					IIND_GUI_HINT_ELEMENT
 				);
 				
-				if(iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT].display_counter > 0)
+				if
+				(
+					iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT]
+					.display_counter 
+					> 0
+				)
 				iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT].display_counter -= 1;
 			
 				iind_render_world
