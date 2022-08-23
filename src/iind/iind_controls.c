@@ -73,12 +73,12 @@ bool iind_handle_navigation_controls
 			*iind_menu_state = !(*iind_menu_state);
 			break;
 			
-		case IIND_MENU_LEFT_KEY_BIND:
+		case IIND_MENU_LEFT_KEY_BIND_ID:
 			*iind_selected_menu_item -= 1;
 			if(*iind_selected_menu_item < 0) *iind_selected_menu_item = IIND_MENU_ITEM_COUNT - 1;
 			break;
 			
-		case IIND_MENU_RIGHT_KEY_BIND:
+		case IIND_MENU_RIGHT_KEY_BIND_ID:
 			*iind_selected_menu_item += 1;
 			if(*iind_selected_menu_item > IIND_MENU_ITEM_COUNT - 1) *iind_selected_menu_item = 0;
 			break;
