@@ -4,6 +4,7 @@ obj_files = \
 	src/iind/iind_gui.o \
 	src/iind/iind_init.o \
 	src/iind/iind_load.o \
+	src/iind/iind_menu.o \
 	src/iind/iind_render.o \
 	src/iind/iind_run.o \
 	src/iind/iind_world.o \

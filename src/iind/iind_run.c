@@ -21,6 +21,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "iind_edit.h"
 #include "iind_gui.h"
 #include "iind_load.h"
+#include "iind_menu.h"
 #include "iind_render.h"
 #include "iind_run.h"
 #include "iind_world.h"
@@ -294,15 +295,8 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	=========
 	*/
 	
-	bool iind_menu_state = false;
-	
-	char iind_menu_item_strings[IIND_MENU_ITEM_COUNT][IIND_MENU_ITEM_STR_MAX_LEN] =
-	{
-		IIND_MENU_ITEM_1_STR,
-		IIND_MENU_ITEM_2_STR
-	};
-	
-	int iind_selected_menu_item = 0;
+	bool iind_menu_open_state = false;
+	bool iind_menu_selection_state = false;
 	
 	/*
 	==============
@@ -511,6 +505,82 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 			);
 			
 			/*
+			===============
+			RENDER UPDATING
+			===============
+			*/
+			
+			if
+			(
+				iind_handle_sdl_tick_intervals
+				(
+					&iind_fps_refresh_rate,
+					&iind_fps_sdl_tick_counter,
+					&iind_prev_fps_sdl_ticks
+				)
+			)
+			{	
+				SDL_GetWindowSize
+				(
+					iind_sdl_window,
+					&iind_sdl_window_size[0],
+					&iind_sdl_window_size[1]
+				);
+			
+				iind_camera[0] =
+				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x + 0.75 +
+				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y -
+				iind_sdl_window_size[0] / iind_render_scale / iind_aspect_ratio / 2;
+					
+				iind_camera[1] =
+				iind_sdl_window_size[1] / iind_render_scale +
+				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y + 0.75 -
+				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x;
+			
+				iind_handle_gui_text_element_fade
+				(
+					iind_sdl_renderer,
+					iind_gui_elements,
+					IIND_GUI_HINT_ELEMENT
+				);
+				
+				if
+				(
+					iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT]
+					.display_counter 
+					> 0
+				)
+				iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT].display_counter -= 1;
+			
+				iind_render_world
+				(
+					iind_sdl_renderer,
+					iind_sdl_textures,
+					iind_world_markers,
+					iind_world_tiles,
+					iind_world_entities,
+					iind_world_tile_count,
+					iind_world_entity_count,
+					iind_render_scale,
+					iind_aspect_ratio,
+					iind_camera
+				);
+				
+				iind_render_gui
+				(
+					iind_sdl_renderer,
+					iind_world_entities,
+					iind_gui_elements,
+					iind_render_scale,
+					iind_aspect_ratio,
+					iind_sdl_window_size,
+					iind_sdl_textures
+				);
+						
+				SDL_RenderPresent(iind_sdl_renderer);
+			}
+			
+			/*
 			==============
 			WORLD UPDATING
 			==============
@@ -526,7 +596,20 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				)
 			)
 			{
+				/*Prevents holding down certain keys.*/
+				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
+				{
+					iind_input_hold_state = false;
+					
+					if(iind_sdl_key_presses[i] == true)
+					{
+						iind_input_hold_state = true;
+						break;
+					}
+				}
+			
 				/*TEMPORARY KEY BIND ASSIGNMENT:*/
+				
 				iind_sdl_key_bind_ids[SDL_SCANCODE_F11] =
 				IIND_FULLSCREEN_KEY_BIND_ID;
 				
@@ -537,7 +620,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				IIND_DIALOGUE_KEY_BIND_ID;
 				
 				iind_sdl_key_bind_ids[SDL_SCANCODE_ESCAPE] =
-				IIND_MENU_KEY_BIND_ID;
+				IIND_MENU_OPEN_KEY_BIND_ID;
 				
 				iind_sdl_key_bind_ids[SDL_SCANCODE_LEFT] =
 				IIND_MENU_LEFT_KEY_BIND_ID;
@@ -545,17 +628,10 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				iind_sdl_key_bind_ids[SDL_SCANCODE_RIGHT] =
 				IIND_MENU_RIGHT_KEY_BIND_ID;
 				
-				/*END*/
+				iind_sdl_key_bind_ids[SDL_SCANCODE_RETURN] =
+				IIND_MENU_SELECT_KEY_BIND_ID;
 				
-				iind_handle_player_movement_controls
-				(
-					iind_world_markers,
-					iind_sdl_mouse_pos,
-					iind_sdl_mouse_state,
-					iind_render_scale,
-					iind_aspect_ratio,
-					iind_camera
-				);
+				/*END TEMPORARY KEY BIND ASSIGNMENT*/
 				
 				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
 				{
@@ -570,8 +646,8 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 							(
 								iind_sdl_key_bind_ids[i],
 								iind_dialogue_tags,
-								&iind_menu_state,
-								&iind_selected_menu_item
+								&iind_menu_open_state,
+								&iind_menu_selection_state
 							)
 						)
 						{
@@ -607,6 +683,54 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					}
 				}
 				
+				if(iind_menu_selection_state)
+				{
+					iind_handle_menu_operations
+					(
+						
+					);
+					
+					iind_menu_selection_state = false;
+				}
+				
+				if(iind_menu_open_state)
+				{
+					if(iind_input_hold_state) iind_update_gui_text_element
+					(
+						iind_sdl_renderer,
+						iind_gui_elements,
+						IIND_GUI_MENU_ELEMENT,
+						iind_gui_text_ttf_font,
+						iind_gui_text_sdl_color,
+						" ",
+						0
+					);
+					
+					continue;
+				}
+				else if(iind_input_hold_state)
+				{
+					iind_update_gui_text_element
+					(
+						iind_sdl_renderer,
+						iind_gui_elements,
+						IIND_GUI_MENU_ELEMENT,
+						iind_gui_text_ttf_font,
+						iind_gui_text_sdl_color,
+						" ",
+						0
+					);
+				}
+				
+				iind_handle_player_movement_controls
+				(
+					iind_world_markers,
+					iind_sdl_mouse_pos,
+					iind_sdl_mouse_state,
+					iind_render_scale,
+					iind_aspect_ratio,
+					iind_camera
+				);
 				
 				/*
 				BEGIN TEMP.
@@ -773,18 +897,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 					iind_world_entities[0].health = 100;
 				}
 				
-				/*Prevents holding down certain keys.*/
-				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
-				{
-					iind_input_hold_state = false;
-					
-					if(iind_sdl_key_presses[i] == true)
-					{
-						iind_input_hold_state = true;
-						break;
-					}
-				}
-				
 				if(iind_edit_mode && iind_input_hold_state)
 				{
 					sprintf
@@ -811,40 +923,12 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 						0
 					);
 				}
+				
 				/*
 				END TEMP.
 				EVERYTHING BEFORE THIS POINT SHOULD BE REWORKED INTO
 				THE CONTROLS FUNCTION.
 				*/
-
-				if(iind_menu_state && iind_input_hold_state)
-				{
-					iind_update_gui_text_element
-					(
-						iind_sdl_renderer,
-						iind_gui_elements,
-						IIND_GUI_MENU_ELEMENT,
-						iind_gui_text_ttf_font,
-						iind_gui_text_sdl_color,
-						iind_menu_item_strings[iind_selected_menu_item],
-						0
-					);
-				}
-				else if(iind_input_hold_state)
-				{
-					iind_update_gui_text_element
-					(
-						iind_sdl_renderer,
-						iind_gui_elements,
-						IIND_GUI_MENU_ELEMENT,
-						iind_gui_text_ttf_font,
-						iind_gui_text_sdl_color,
-						" ",
-						0
-					);
-					
-					iind_selected_menu_item = 0;
-				}
 				
 				if(iind_edit_mode)
 				{
@@ -920,82 +1004,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				{
 					iind_world_entities[IIND_WORLD_PLAYER_ENTITY].health = 100;
 				}
-			}
-			
-			/*
-			===============
-			RENDER UPDATING
-			===============
-			*/
-			
-			else if
-			(
-				iind_handle_sdl_tick_intervals
-				(
-					&iind_fps_refresh_rate,
-					&iind_fps_sdl_tick_counter,
-					&iind_prev_fps_sdl_ticks
-				)
-			)
-			{	
-				SDL_GetWindowSize
-				(
-					iind_sdl_window,
-					&iind_sdl_window_size[0],
-					&iind_sdl_window_size[1]
-				);
-			
-				iind_camera[0] =
-				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x + 0.75 +
-				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y -
-				iind_sdl_window_size[0] / iind_render_scale / iind_aspect_ratio / 2;
-					
-				iind_camera[1] =
-				iind_sdl_window_size[1] / iind_render_scale +
-				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y + 0.75 -
-				iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x;
-			
-				iind_handle_gui_text_element_fade
-				(
-					iind_sdl_renderer,
-					iind_gui_elements,
-					IIND_GUI_HINT_ELEMENT
-				);
-				
-				if
-				(
-					iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT]
-					.display_counter 
-					> 0
-				)
-				iind_gui_elements[IIND_GUI_DIALOGUE_ELEMENT].display_counter -= 1;
-			
-				iind_render_world
-				(
-					iind_sdl_renderer,
-					iind_sdl_textures,
-					iind_world_markers,
-					iind_world_tiles,
-					iind_world_entities,
-					iind_world_tile_count,
-					iind_world_entity_count,
-					iind_render_scale,
-					iind_aspect_ratio,
-					iind_camera
-				);
-				
-				iind_render_gui
-				(
-					iind_sdl_renderer,
-					iind_world_entities,
-					iind_gui_elements,
-					iind_render_scale,
-					iind_aspect_ratio,
-					iind_sdl_window_size,
-					iind_sdl_textures
-				);
-						
-				SDL_RenderPresent(iind_sdl_renderer);
 			}
 			
 			/*

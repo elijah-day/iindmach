@@ -20,8 +20,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #include "iind_controls.h"
 #include "iind_gui.h"
 #include "iind_load.h"
+#include "iind_menu.h"
 #include "iind_run.h"
 #include "iind_world.h"
+#include <math.h>
 #include "SDL2/SDL.h"
 #include <stdbool.h>
 
@@ -59,8 +61,8 @@ bool iind_handle_navigation_controls
 (
 	int iind_sdl_key_bind_id,
 	int *iind_dialogue_tags,
-	bool *iind_menu_state,
-	int *iind_selected_menu_item
+	bool *iind_menu_open_state,
+	bool *iind_menu_selection_state
 )
 {
 	switch(iind_sdl_key_bind_id)
@@ -69,18 +71,23 @@ bool iind_handle_navigation_controls
 			iind_dialogue_tags[IIND_DIALOGUE_CUR_TAG] += 1;
 			break;
 			
-		case IIND_MENU_KEY_BIND_ID:
-			*iind_menu_state = !(*iind_menu_state);
+		case IIND_MENU_OPEN_KEY_BIND_ID:
+			*iind_menu_open_state = !(*iind_menu_open_state);
 			break;
 			
 		case IIND_MENU_LEFT_KEY_BIND_ID:
-			*iind_selected_menu_item -= 1;
-			if(*iind_selected_menu_item < 0) *iind_selected_menu_item = IIND_MENU_ITEM_COUNT - 1;
+			
 			break;
 			
 		case IIND_MENU_RIGHT_KEY_BIND_ID:
-			*iind_selected_menu_item += 1;
-			if(*iind_selected_menu_item > IIND_MENU_ITEM_COUNT - 1) *iind_selected_menu_item = 0;
+			
+			break;
+			
+		case IIND_MENU_SELECT_KEY_BIND_ID:
+			if(*iind_menu_open_state)
+			{
+				*iind_menu_selection_state = true;
+			}
 			break;
 			
 		default:

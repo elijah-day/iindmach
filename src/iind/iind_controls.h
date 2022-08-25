@@ -25,9 +25,10 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_FULLSCREEN_KEY_BIND_ID 0
 #define IIND_QUICKSAVE_KEY_BIND_ID 1
 #define IIND_DIALOGUE_KEY_BIND_ID 2
-#define IIND_MENU_KEY_BIND_ID 3
+#define IIND_MENU_OPEN_KEY_BIND_ID 3
 #define IIND_MENU_LEFT_KEY_BIND_ID 4
 #define IIND_MENU_RIGHT_KEY_BIND_ID 5
+#define IIND_MENU_SELECT_KEY_BIND_ID 6
 
 #include "iind_render.h"
 #include "iind_world.h"
@@ -47,8 +48,8 @@ bool iind_handle_navigation_controls
 (
 	int iind_sdl_key_bind_id,
 	int *iind_dialogue_tags,
-	bool *iind_menu_state,
-	int *iind_selected_menu_item
+	bool *iind_menu_open_state,
+	bool *iind_menu_selection_state
 );
 
 bool iind_handle_misc_controls

@@ -602,16 +602,16 @@ void iind_handle_player_movement
 	if
 	(
 		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x <
-		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].x + 0.01 &&
+		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].x + 0.02 &&
 		
 		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].x >
-		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].x - 0.01 &&
+		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].x - 0.02 &&
 			
 		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y <
-		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].y + 0.01 &&
+		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].y + 0.02 &&
 		
 		iind_world_entities[IIND_WORLD_PLAYER_ENTITY].y >
-		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].y - 0.01
+		iind_world_markers[IIND_WORLD_PLAYER_ENTITY].y - 0.02
 	)
 	iind_world_markers[IIND_WORLD_PLAYER_MOVEMENT_MARKER].active = false;
 }

@@ -41,11 +41,6 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_EDIT_INFO_STR_MAX_LEN 128
 #define IIND_WORLD_MARKER_COUNT 2
 
-#define IIND_MENU_ITEM_COUNT 2
-#define IIND_MENU_ITEM_STR_MAX_LEN 16
-#define IIND_MENU_ITEM_1_STR "< QUIT >"
-#define IIND_MENU_ITEM_2_STR "< SAVE >"
-
 #include "SDL2/SDL.h"
 #include <stdbool.h>
 
