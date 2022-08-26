@@ -62,7 +62,9 @@ bool iind_handle_navigation_controls
 	int iind_sdl_key_bind_id,
 	int *iind_dialogue_tags,
 	bool *iind_menu_open_state,
-	bool *iind_menu_selection_state
+	bool *iind_menu_selection_state,
+	IINDMenuItem *iind_main_menu,
+	IINDMenuNav *iind_menu_nav
 )
 {
 	switch(iind_sdl_key_bind_id)
@@ -76,16 +78,31 @@ bool iind_handle_navigation_controls
 			break;
 			
 		case IIND_MENU_LEFT_KEY_BIND_ID:
-			
+			iind_menu_nav->selected_menu_item -= 1;
 			break;
 			
 		case IIND_MENU_RIGHT_KEY_BIND_ID:
-			
+			iind_menu_nav->selected_menu_item += 1;
 			break;
 			
 		case IIND_MENU_SELECT_KEY_BIND_ID:
 			if(*iind_menu_open_state)
 			{
+				if
+				(
+					(*iind_menu_nav).selected_sub_menu
+					[iind_menu_nav->selected_menu_item]
+					.sub_menu != NULL
+				)
+				{
+					(*iind_menu_nav).prev_sub_menu = 
+					(*iind_menu_nav).selected_sub_menu;
+					
+					(*iind_menu_nav).selected_sub_menu =
+					(*iind_menu_nav).prev_sub_menu
+					[iind_menu_nav->selected_menu_item].sub_menu;
+				}
+				
 				*iind_menu_selection_state = true;
 			}
 			break;

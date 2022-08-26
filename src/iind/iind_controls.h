@@ -30,6 +30,7 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #define IIND_MENU_RIGHT_KEY_BIND_ID 5
 #define IIND_MENU_SELECT_KEY_BIND_ID 6
 
+#include "iind_menu.h"
 #include "iind_render.h"
 #include "iind_world.h"
 #include <stdbool.h>
@@ -49,7 +50,9 @@ bool iind_handle_navigation_controls
 	int iind_sdl_key_bind_id,
 	int *iind_dialogue_tags,
 	bool *iind_menu_open_state,
-	bool *iind_menu_selection_state
+	bool *iind_menu_selection_state,
+	IINDMenuItem *iind_main_menu,
+	IINDMenuNav *iind_menu_nav
 );
 
 bool iind_handle_misc_controls

@@ -20,13 +20,22 @@ with this program; if not, write to the Free Software Foundation, Inc.,
 #ifndef IIND_MENU_H
 #define IIND_MENU_H
 
-#define IIND_MENU_SUBMENU_MAX_COUNT 4
-
-#define IIND_MENU_ITEM_COUNT 2
 #define IIND_MENU_ITEM_STR_MAX_LEN 16
-#define IIND_MENU_ITEM_1_STR "< QUIT >"
-#define IIND_MENU_ITEM_2_STR "< SAVE >"
 
-#define IIND_MENU_DEPTH_MAX 4
+typedef struct IINDMenuItem
+{
+	char item_string[IIND_MENU_ITEM_STR_MAX_LEN];
+	struct IINDMenuItem *sub_menu;
+}
+IINDMenuItem;
+
+typedef struct IINDMenuNav
+{
+	struct IINDMenuItem *prev_sub_menu;
+	struct IINDMenuItem *selected_sub_menu;
+	int menu_item_max_count;
+	int selected_menu_item;
+}
+IINDMenuNav;
 
 #endif

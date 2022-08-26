@@ -298,6 +298,34 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	bool iind_menu_open_state = false;
 	bool iind_menu_selection_state = false;
 	
+	IINDMenuItem *iind_main_menu = NULL;
+	
+	/*
+	iind_main_menu = calloc(2, sizeof(IINDMenuItem));
+	
+	strcpy(iind_main_menu[0].item_string, "<SAVE>");
+	strcpy(iind_main_menu[1].item_string, "<QUIT>");
+	
+	iind_main_menu[1].sub_menu = calloc(2, sizeof(IINDMenuItem));
+	strcpy(iind_main_menu[1].sub_menu[0].item_string, "<NO>");
+	strcpy(iind_main_menu[1].sub_menu[1].item_string, "<YES>");
+	*/
+	
+	IINDMenuNav iind_menu_nav;
+	iind_menu_nav.prev_sub_menu = NULL;
+	iind_menu_nav.selected_sub_menu = iind_main_menu;
+	iind_menu_nav.selected_menu_item = 0;
+	
+	iind_menu_nav.menu_item_max_count = 0;
+	
+	/*
+	TODO: MAKE A FUNCTION TO FREE ALL OF THIS ALLOCATED MEMORY.
+	TODO: MAKE A FUNCTION TO FREE ALL OF THIS ALLOCATED MEMORY.
+	TODO: MAKE A FUNCTION TO FREE ALL OF THIS ALLOCATED MEMORY.
+	TODO: MAKE A FUNCTION TO FREE ALL OF THIS ALLOCATED MEMORY.
+	TODO: MAKE A FUNCTION TO FREE ALL OF THIS ALLOCATED MEMORY.
+	*/
+	
 	/*
 	==============
 	SDL INPUT VARS
@@ -647,7 +675,9 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 								iind_sdl_key_bind_ids[i],
 								iind_dialogue_tags,
 								&iind_menu_open_state,
-								&iind_menu_selection_state
+								&iind_menu_selection_state,
+								iind_main_menu,
+								&iind_menu_nav
 							)
 						)
 						{
@@ -694,7 +724,7 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				}
 				
 				if(iind_menu_open_state)
-				{
+				{	
 					if(iind_input_hold_state) iind_update_gui_text_element
 					(
 						iind_sdl_renderer,
@@ -702,7 +732,8 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 						IIND_GUI_MENU_ELEMENT,
 						iind_gui_text_ttf_font,
 						iind_gui_text_sdl_color,
-						" ",
+						iind_menu_nav.selected_sub_menu
+						[iind_menu_nav.selected_menu_item].item_string,
 						0
 					);
 					
@@ -720,6 +751,10 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 						" ",
 						0
 					);
+					
+					iind_menu_nav.prev_sub_menu = NULL;
+					iind_menu_nav.selected_sub_menu = iind_main_menu;
+					iind_menu_nav.selected_menu_item = 0;
 				}
 				
 				iind_handle_player_movement_controls
