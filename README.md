@@ -1,8 +1,8 @@
 # IINDMACH
 
-### License
+###### Copyright (C) 2022  Elijah Day
 
-Copyright (C) 2022  Elijah Day
+### License
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,3 +27,48 @@ information.
 
 This software utilizes SDL2 for cross-platform graphics and hardware
 access.  Visit [www.libsdl.org](https://www.libsdl.org/) for more information.
+
+### Building
+
+If you're building IINDMACH for Linux, you'll need the following packages/dependencies:
+* SDL2 Development Library
+* SDL2_image Development Library
+* SDL2_ttf Development Library
+
+These can be installed on Debian-based systems using the following command:
+```
+sudo apt install libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev
+```
+To build and launch the game, simply run:
+```
+make
+```
+\
+\
+If you're building IINDMACH for Windows, you'll need MinGW-w64:
+```
+sudo apt install mingw-w64
+```
+All of the other dependencies should be in the `external/` directory.  To build and launch the game, run:
+```
+make OS=win64
+```
+Alternatively, for 32-bit binaries, run:
+```
+make OS=win32
+```
+\
+\
+The Makefile launches IINDMACH by default upon completing the build.  If you wish to build the game without launching it, use:
+```
+make build
+```
+\
+\
+All builds are placed in the `build/` directory.  To clear the directory, you can use:
+```
+make destroy
+```
+
+
+
