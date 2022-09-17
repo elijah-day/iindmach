@@ -624,149 +624,6 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				)
 			)
 			{
-				/*Prevents holding down certain keys.*/
-				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
-				{
-					iind_input_hold_state = false;
-					
-					if(iind_sdl_key_presses[i] == true)
-					{
-						iind_input_hold_state = true;
-						break;
-					}
-				}
-			
-				/*TEMPORARY KEY BIND ASSIGNMENT:*/
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_F11] =
-				IIND_FULLSCREEN_KEY_BIND_ID;
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_F5] =
-				IIND_QUICKSAVE_KEY_BIND_ID;
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_SPACE] =
-				IIND_DIALOGUE_KEY_BIND_ID;
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_ESCAPE] =
-				IIND_MENU_OPEN_KEY_BIND_ID;
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_LEFT] =
-				IIND_MENU_LEFT_KEY_BIND_ID;
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_RIGHT] =
-				IIND_MENU_RIGHT_KEY_BIND_ID;
-				
-				iind_sdl_key_bind_ids[SDL_SCANCODE_RETURN] =
-				IIND_MENU_SELECT_KEY_BIND_ID;
-				
-				/*END TEMPORARY KEY BIND ASSIGNMENT*/
-				
-				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
-				{
-					if(iind_sdl_key_presses[i])
-					{	
-						if(iind_sdl_key_hold_states[i]) break;
-						iind_sdl_key_hold_states[i] = true;
-						
-						if
-						(
-							iind_handle_navigation_controls
-							(
-								iind_sdl_key_bind_ids[i],
-								iind_dialogue_tags,
-								&iind_menu_open_state,
-								&iind_menu_selection_state,
-								iind_main_menu,
-								&iind_menu_nav
-							)
-						)
-						{
-							break;
-						}
-						else if
-						(
-							iind_handle_misc_controls
-							(
-								iind_sdl_key_bind_ids[i],
-								iind_sdl_window,
-								iind_sdl_renderer,
-								iind_world_names[iind_cur_world_id],
-								iind_world_tiles,
-								iind_world_entities,
-								iind_world_funcs,
-								iind_world_tile_count,
-								iind_world_entity_count,
-								iind_world_func_count,
-								iind_gui_elements,
-								iind_gui_text_ttf_font,
-								iind_gui_text_sdl_color,
-								&iind_sdl_window_fullscreen_state
-							)
-						)
-						{
-							break;
-						}
-					}
-					else
-					{
-						iind_sdl_key_hold_states[i] = false;
-					}
-				}
-				
-				if(iind_menu_selection_state)
-				{
-					iind_handle_menu_operations
-					(
-						
-					);
-					
-					iind_menu_selection_state = false;
-				}
-				
-				if(iind_menu_open_state)
-				{	
-					if(iind_input_hold_state) iind_update_gui_text_element
-					(
-						iind_sdl_renderer,
-						iind_gui_elements,
-						IIND_GUI_MENU_ELEMENT,
-						iind_gui_text_ttf_font,
-						iind_gui_text_sdl_color,
-						iind_menu_nav.selected_sub_menu
-						[iind_menu_nav.selected_menu_item].item_string,
-						0
-					);
-					
-					continue;
-				}
-				else if(iind_input_hold_state)
-				{
-					iind_update_gui_text_element
-					(
-						iind_sdl_renderer,
-						iind_gui_elements,
-						IIND_GUI_MENU_ELEMENT,
-						iind_gui_text_ttf_font,
-						iind_gui_text_sdl_color,
-						" ",
-						0
-					);
-					
-					iind_menu_nav.prev_sub_menu = NULL;
-					iind_menu_nav.selected_sub_menu = iind_main_menu;
-					iind_menu_nav.selected_menu_item = 0;
-				}
-				
-				iind_handle_player_movement_controls
-				(
-					iind_world_markers,
-					iind_sdl_mouse_pos,
-					iind_sdl_mouse_state,
-					iind_render_scale,
-					iind_aspect_ratio,
-					iind_camera
-				);
-				
 				/*
 				BEGIN TEMP.
 				EVERYTHING PAST THIS POINT SHOULD BE REWORKED INTO
@@ -964,6 +821,149 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				EVERYTHING BEFORE THIS POINT SHOULD BE REWORKED INTO
 				THE CONTROLS FUNCTION.
 				*/
+			
+				/*Prevents holding down certain keys.*/
+				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
+				{
+					iind_input_hold_state = false;
+					
+					if(iind_sdl_key_presses[i] == true)
+					{
+						iind_input_hold_state = true;
+						break;
+					}
+				}
+			
+				/*TEMPORARY KEY BIND ASSIGNMENT:*/
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_F11] =
+				IIND_FULLSCREEN_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_F5] =
+				IIND_QUICKSAVE_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_SPACE] =
+				IIND_DIALOGUE_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_ESCAPE] =
+				IIND_MENU_OPEN_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_LEFT] =
+				IIND_MENU_LEFT_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_RIGHT] =
+				IIND_MENU_RIGHT_KEY_BIND_ID;
+				
+				iind_sdl_key_bind_ids[SDL_SCANCODE_RETURN] =
+				IIND_MENU_SELECT_KEY_BIND_ID;
+				
+				/*END TEMPORARY KEY BIND ASSIGNMENT*/
+				
+				for(int i = 0; i < IIND_SDL_KEY_COUNT; i++)
+				{
+					if(iind_sdl_key_presses[i])
+					{	
+						if(iind_sdl_key_hold_states[i]) break;
+						iind_sdl_key_hold_states[i] = true;
+						
+						if
+						(
+							iind_handle_navigation_controls
+							(
+								iind_sdl_key_bind_ids[i],
+								iind_dialogue_tags,
+								&iind_menu_open_state,
+								&iind_menu_selection_state,
+								iind_main_menu,
+								&iind_menu_nav
+							)
+						)
+						{
+							break;
+						}
+						else if
+						(
+							iind_handle_misc_controls
+							(
+								iind_sdl_key_bind_ids[i],
+								iind_sdl_window,
+								iind_sdl_renderer,
+								iind_world_names[iind_cur_world_id],
+								iind_world_tiles,
+								iind_world_entities,
+								iind_world_funcs,
+								iind_world_tile_count,
+								iind_world_entity_count,
+								iind_world_func_count,
+								iind_gui_elements,
+								iind_gui_text_ttf_font,
+								iind_gui_text_sdl_color,
+								&iind_sdl_window_fullscreen_state
+							)
+						)
+						{
+							break;
+						}
+					}
+					else
+					{
+						iind_sdl_key_hold_states[i] = false;
+					}
+				}
+				
+				if(iind_menu_selection_state)
+				{
+					iind_handle_menu_operations
+					(
+						
+					);
+					
+					iind_menu_selection_state = false;
+				}
+				
+				if(iind_menu_open_state)
+				{	
+					if(iind_input_hold_state) iind_update_gui_text_element
+					(
+						iind_sdl_renderer,
+						iind_gui_elements,
+						IIND_GUI_MENU_ELEMENT,
+						iind_gui_text_ttf_font,
+						iind_gui_text_sdl_color,
+						iind_menu_nav.selected_sub_menu
+						[iind_menu_nav.selected_menu_item].item_string,
+						0
+					);
+					
+					continue;
+				}
+				else if(iind_input_hold_state)
+				{
+					iind_update_gui_text_element
+					(
+						iind_sdl_renderer,
+						iind_gui_elements,
+						IIND_GUI_MENU_ELEMENT,
+						iind_gui_text_ttf_font,
+						iind_gui_text_sdl_color,
+						" ",
+						0
+					);
+					
+					iind_menu_nav.prev_sub_menu = NULL;
+					iind_menu_nav.selected_sub_menu = iind_main_menu;
+					iind_menu_nav.selected_menu_item = 0;
+				}
+				
+				iind_handle_player_movement_controls
+				(
+					iind_world_markers,
+					iind_sdl_mouse_pos,
+					iind_sdl_mouse_state,
+					iind_render_scale,
+					iind_aspect_ratio,
+					iind_camera
+				);
 				
 				if(iind_edit_mode)
 				{
