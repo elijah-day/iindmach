@@ -109,7 +109,7 @@ cp-docs:
 	cp README.md $(target_dir)
 	cp LICENSE $(target_dir)
 
-run:
+run: build
 	cd build/iindmach; $(run_method); cd ../../
 
 clean:
