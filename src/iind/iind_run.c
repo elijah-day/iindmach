@@ -92,7 +92,13 @@ bool iind_handle_sdl_tick_intervals
 	return false;
 }
 
-void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
+void iind_run
+(
+	int argc,
+	char *argv[],
+	SDL_Window *iind_sdl_window,
+	SDL_Renderer *iind_sdl_renderer
+)
 {
 	bool iind_running_state = true;
 
@@ -357,6 +363,13 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 	*/
 
 	bool iind_edit_mode = false;
+	for(int i = 0; i < argc; i++)
+	{
+		if(strcmp(argv[i], "edit") == 0)
+		{
+			iind_edit_mode = true;
+		}
+	}
 	
 	float iind_edit_x = 0;
 	float iind_edit_y = 0;
@@ -845,8 +858,10 @@ void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer)
 				iind_sdl_key_bind_ids[SDL_SCANCODE_SPACE] =
 				IIND_DIALOGUE_KEY_BIND_ID;
 				
+				/*
 				iind_sdl_key_bind_ids[SDL_SCANCODE_ESCAPE] =
 				IIND_MENU_OPEN_KEY_BIND_ID;
+				*/
 				
 				iind_sdl_key_bind_ids[SDL_SCANCODE_LEFT] =
 				IIND_MENU_LEFT_KEY_BIND_ID;

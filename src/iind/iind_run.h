@@ -60,6 +60,12 @@ bool iind_handle_sdl_tick_intervals
 	int *iind_prev_sdl_ticks
 );
 
-void iind_run(SDL_Window *iind_sdl_window, SDL_Renderer *iind_sdl_renderer);
+void iind_run
+(
+	int argc,
+	char *argv[],
+	SDL_Window *iind_sdl_window,
+	SDL_Renderer *iind_sdl_renderer
+);
 
 #endif

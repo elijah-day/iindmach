@@ -29,7 +29,13 @@ int main(int argc, char *argv[])
 
 	if(iind_init_sdl(&iind_sdl_window, &iind_sdl_renderer))
 	{
-		iind_run(iind_sdl_window, iind_sdl_renderer);
+		iind_run
+		(
+			argc,
+			argv,
+			iind_sdl_window,
+			iind_sdl_renderer
+		);
 	}
 
 	iind_terminate_sdl(iind_sdl_window, iind_sdl_renderer);

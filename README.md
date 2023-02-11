@@ -2,6 +2,18 @@
 
 ###### Copyright (C) 2022  Elijah Day
 
+### About
+
+IINDMACH (pronounced "second mock") is an isometric game focused around solving puzzles made up of various elements including doors, logic gates, and an ever-depleting energy bar that can only be recharged at certain points.
+
+![alt text](docs/screenshot.png)
+
+### Progress
+
+Development on IINDMACH has stagnated over the last six months.  A lack of free time and shift in focus towards other projects and demos is partially to blame.  However, as I have developed as a programmer I have begun to dislike the game's current structure.  It does "work," but it isn't anywhere near as optimized or modular as I would like it to be.  Because of this, any future game development will be focused on developing a new project from the ground up using the experience that I have gained from creating IINDMACH.  IINDMACH will be considered "on hold" indefinitely.
+
+For anyone who may be interested, there is still a sample level that can be explored included as the default starting point.  Additionally, "edit mode" can be accessed by simply passing the word "edit" as an argument to the executable.  For adding custom assets to the game, a PNG image must be placed in the "data/assets/images/" directory and the path of the image must be added to the "images.list" text file.  These can be used as tiles or entities.
+
 ### License
 
 This program is free software; you can redistribute it and/or modify
