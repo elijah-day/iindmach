@@ -38,4 +38,9 @@ typedef struct IINDMenuNav
 }
 IINDMenuNav;
 
+void iind_handle_menu_operations
+(
+
+);
+
 #endif
