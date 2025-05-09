@@ -74,4 +74,15 @@ void iind_handle_gui_text_element_fade
 	int iind_gui_element_index
 );
 
+void iind_update_dialogue
+(
+	SDL_Renderer *iind_sdl_renderer,
+	IINDGUIElement *iind_gui_elements,
+	int iind_gui_dialogue_element_index,
+	TTF_Font *iind_gui_text_ttf_font,
+	SDL_Color iind_gui_text_sdl_color,
+	char *iind_dialogue_strings[],
+	int *iind_dialogue_tags
+);
+
 #endif

@@ -81,4 +81,12 @@ bool iind_load_world
 	int iind_world_func_count
 );
 
+void iind_load_sdl_textures
+(
+	SDL_Renderer *iind_sdl_renderer,
+	SDL_Texture *iind_sdl_textures[],
+	const int iind_sdl_texture_count,
+	const char *iind_sdl_texture_list_path
+);
+
 #endif
